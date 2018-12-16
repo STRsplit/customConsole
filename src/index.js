@@ -45,7 +45,7 @@ var _default = function _default(action, globalCondition) {
       if (!passesGlobal) {
         return;
       } else {
-        if (typeof condition === 'string') {
+        if (typeof condition === 'string' || args.length === 1) {
           oldConsole[action].apply(_this, args);
         } else if (typeof condition === 'function' && args.pop()) {
           iterateText(args, condition) && oldConsole[action].apply(_this, args);

@@ -23,7 +23,7 @@ export default (action, globalCondition) => {
             if (!passesGlobal) {
                 return;
             } else {
-                if (typeof condition === 'string') {
+                if (typeof condition === 'string' || args.length === 1) {
                     oldConsole[action].apply(this, args);
                 } else if (typeof condition === 'function' && args.pop()) {
                     iterateText(args, condition) && oldConsole[action].apply(this, args);
