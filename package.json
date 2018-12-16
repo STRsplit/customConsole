@@ -4,7 +4,7 @@
   "description": "custom console methods overwriting native methods",
   "main": "./src/index.js",
   "files": [
-    "./src/index.js"
+    "src"
   ],
   "dependencies": {},
   "devDependencies": {
