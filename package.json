@@ -3,12 +3,8 @@
   "version": "1.0.0",
   "description": "custom console methods overwriting native methods",
   "main": "./src/index.js",
-  "directories": {
-    "test": "tests",
-    "lib": "src"
-  },
   "files": [
-    "./src"
+    "./src/index.js"
   ],
   "dependencies": {},
   "devDependencies": {
