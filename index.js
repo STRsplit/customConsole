@@ -1,26 +1,36 @@
-const customLog = require('./customConsole');
-const example = require('./example');
-const assert = require('assert');
-const sinon = require('sinon');
+const oldConsole = { ...console };
 
-const outPut = sinon.stub(process.stdout, 'write');
-customLog('log', true);
-console.log('testing');
-process.stdout.write.restore();
-assert(outPut.called, 'output called');
-// customLog('warn');
-// example();
-console.log('test');
-assert(true, 'false');
-// process.stdout.write.restore();
-// const test = async () => {
-//     // process.stdout.write.restore();
-//     // console.log(outPut);
-//     await assert(outPut.called, 'output called');
-// }
-// console.log('hello', false);
+const iterateText = (logValues, globalCondition) => {
+    if (Array.isArray(logValues)) {
+        return logValues.every(globalCondition)
+    }
+    return globalCondition(logValues);
+}
 
-console.warn('please work');
-// assert.ok(true, 'true');
-// console.log('whats up', true)
-// test();
+export default (action, globalCondition) => {
+    action = action || 'log';
+    console[action] = (...args) => {
+        let condition = args[args.length - 1];
+        if (args[args.length - 1] === '~true' && args.pop()) {
+            oldConsole[action].apply(this, args);
+        } else if (args[args.length - 1] === '~false') {
+            return;
+        } else {
+            let passesGlobal = typeof globalCondition === 'undefined';
+            if (!passesGlobal) {
+                passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
+            }
+            if (!passesGlobal) {
+                return;
+            } else {
+                if (typeof condition === 'string') {
+                    oldConsole[action].apply(this, args);
+                } else if (typeof condition === 'function' && args.pop()) {
+                    iterateText(args, condition) && oldConsole[action].apply(this, args);
+                } else {
+                    args.pop() && Boolean(condition) && oldConsole[action].apply(this, args);
+                }
+            }
+        }
+    }
+};
