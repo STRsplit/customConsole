@@ -1,0 +1,38 @@
+{
+  "name": "customconsole",
+  "version": "1.0.0",
+  "description": "custom console methods overwriting native methods",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "sinon": "^7.2.2"
+  },
+  "devDependencies": {
+    "ava": "^1.0.1"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STRsplit/customConsole.git"
+  },
+  "keywords": [
+    "custom",
+    "console",
+    "console",
+    "console",
+    "log",
+    "console.log",
+    "overwrite",
+    "console"
+  ],
+  "author": "Steven Reed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STRsplit/customConsole/issues"
+  },
+  "homepage": "https://github.com/STRsplit/customConsole#readme"
+}
