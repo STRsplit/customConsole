@@ -11,7 +11,6 @@ test('console log is correctly overwritten', t => {
     customLog('log', false);
     console.log('testing after instance of customLog');
     process.stdout.write.restore();
-
     t.true(nativeLog.called, 'native console.log is called before the custom instance overwrites it');
     t.false(overrideLog.called, 'the custom override is applied and native console.log doesn\'t get called');
 });
@@ -85,23 +84,19 @@ test('Testing overwritten console can be called with console.original[action]', 
     t.true(overrideLog.calledTwice, 'console.log has now been called twice');
     t.is(overrideLog.firstCall.args[0], 'The call to console.original.log should produce output' + '\n', 'the first argument should be the one passed in first call to original')
     t.is(overrideLog.lastCall.args[0], 'Second successful log' + '\n', 'the first argument should be the one passed in first call')
-
 });
 
 test('Testing the original console methods will work as expected', t => {
     const overrideCount = sinon.stub(process.stdout, 'write');
-    console.count();
-    console.count();
-    process.stdout.write.restore();
-    console.original.warn(overrideCount.callCount);
-    t.true(overrideCount.calledTwice, 'console.log has now been called twice');
-    t.is(overrideCount.firstCall.args[0], 'default: 1' + '\n', 'the count should reflect the times it was called. First call would be 1.');
-    t.is(overrideCount.lastCall.args[0], 'default: 2' + '\n', 'the count should reflect the times it was called. Last call would be 2.');
-
     console.count('a');
-    t.is(overrideCount.lastCall.args[0], 'a: 1' + '\n', 'the count should reflect the times it was called. Last call would be 1.');
+    console.count('a');
 
+    process.stdout.write.restore();
+    t.true(overrideCount.calledTwice, 'console.log has now been called twice');
+    t.is(overrideCount.firstCall.args[0], 'a: 1' + '\n', 'the count should reflect the times it was called. First call would be 1.');
+    t.is(overrideCount.lastCall.args[0], 'a: 2' + '\n', 'the count should reflect the times it was called. Last call would be 2.');
 });
+
 test('Testing the original console methods are available', t => {
     t.truthy(console.assert, 'native method console.assert is still available');
     t.truthy(console.clear, 'native method console.clear is still available');

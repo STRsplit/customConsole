@@ -22,14 +22,19 @@ var iterateText = function iterateText(logValues, globalCondition) {
 };
 
 var _default = function _default(action, globalCondition) {
-  if (!console.original) {
-    console.original = _objectSpread({}, oldConsole);
-  }
-
   action = action || 'log';
 
   console[action] = function () {
-    var passesGlobal = typeof globalCondition === 'undefined';
+    var caller = new Error().stack.split("at ")[2].trim().split(' ')[0];
+    var passesGlobal = false;
+
+    if (caller.split('.')[1] && oldConsole[caller.split('.')[1]]) {
+      passesGlobal = true;
+    }
+
+    if (!passesGlobal && caller !== 'console') {
+      passesGlobal = typeof globalCondition === 'undefined';
+    }
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -39,12 +44,12 @@ var _default = function _default(action, globalCondition) {
       passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
     }
 
-    if (!passesGlobal) {
-      return;
-    }
-
-    oldConsole[action].apply(_this, args);
+    passesGlobal && oldConsole[action].apply(_this, args);
   };
+
+  if (!console.original) {
+    console.original = _objectSpread({}, oldConsole);
+  }
 };
 
 exports.default = _default;

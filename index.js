@@ -8,22 +8,23 @@ const iterateText = (logValues, globalCondition) => {
 }
 
 export default (action, globalCondition) => {
-    if (!console.original) {
-        console.original = { ...oldConsole };
-    }
     action = action || 'log';
-    
     console[action] = (...args) => {
-        let passesGlobal = typeof globalCondition === 'undefined';
-
+        const caller = ((new Error().stack).split("at ")[2]).trim().split(' ')[0];
+        let passesGlobal = false;
+        if (caller.split('.')[1] && oldConsole[caller.split('.')[1]]) {
+            passesGlobal = true;
+        }
+        if (!passesGlobal && caller !== 'console') {
+            passesGlobal = typeof globalCondition === 'undefined';
+        }
         if (!passesGlobal) {
             passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
         }
-
-        if (!passesGlobal) {
-            return;
-        }
-        oldConsole[action].apply(this, args);
+        
+        passesGlobal && oldConsole[action].apply(this, args);
     }
-
-};
+    if (!console.original) {
+        console.original = { ...oldConsole };
+    }
+}
