@@ -40,7 +40,7 @@ console.warn('foo bar baz'); // will not print to console
 ```
 
 #### Globally silence console.log, but print / don't print one specific instance of a console.log
-A special argument of `'~true'` will allow a single instance of a console method to work as expected. A special argument of `'~false'` will override the a global true.
+`original` will be added to the console object storing all of the original methods of console.
 
 ```javascript
 import customConsole from 'customconsole';
@@ -49,25 +49,22 @@ customConsole('log', false);
 console.log('foo'); // will not print to console
 console.log('bar'); // will not print to console
 
-console.log('foo', '~true'); // will print 'foo' to console
-
-customConsole('log', true);
-console.log('foo'); // will print 'foo' to console
-console.log('bar', '~false'); // will not print to console
+console.original.log('foo'); // will print 'foo' to console
 
 ```
-#### No global setting, allow each log to determine if it should print or not
-Obviously, if you have some weird use case where you pass a boolean into your console.log as the last argument you will see some unexpected console statements.
+#### Globally set as false, restore to make further statements work
+This is not a good use.
 
 ```javascript
 import customConsole from 'customconsole';
-customConsole('log');
+customConsole('log', false);
+console.log('foo'); // will not print to console
+console.log('bar'); // will not print to console
 
+customConsole('log', true);
 console.log('foo'); // will print 'foo' to console
 console.log('bar'); // will print 'bar' to console
 
-console.log('foo', (text) => text.includes('foo')); // will print 'foo' to console
-console.log('bar', (text) => typeof text === 'function'); // will not print to console
 
 ```
 #### Prints all arguments passed like a standard console method
@@ -75,18 +72,15 @@ Even if you setup the custom log, you can still pass in multiple arguments. The 
 
 ```javascript
 import customConsole from 'customconsole';
-customConsole('log');
+customConsole('log', (text) => !text.includes('test'));
 
 console.log('foo', 'bar', 'baz'); // will print 'foo bar baz' to console
-console.log('foo', 'bar', true); // will print 'foo bar' to console
-// bad example, but concept is same
-console.log('foo', 'bar', (text) => text !== 'baz')); // will print 'foo bar' to console
-/*** Considered changing to individual args, but as of now, all or none conditional ***/
-console.log('foo', 'bar', 'baz', (text) => text !== 'baz')); // will not print to console
+console.log('foo', 'bar'); // will print 'foo bar' to console
 
 ```
 
 ## Author
-[![STRsplit](https://github.com/STRsplit.png?size=100)](https://github.com/STRsplit)
----|---|---
-[Steve Reed](https://github.com/STRsplit)
+[![STRsplit](https://github.com/STRsplit.png?size=100)](https://github.com/STRsplit) | 
+---|
+[Steve Reed](https://github.com/STRsplit) |
+

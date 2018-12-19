@@ -22,38 +22,28 @@ var iterateText = function iterateText(logValues, globalCondition) {
 };
 
 var _default = function _default(action, globalCondition) {
+  if (!console.original) {
+    console.original = _objectSpread({}, oldConsole);
+  }
+
   action = action || 'log';
 
   console[action] = function () {
+    var passesGlobal = typeof globalCondition === 'undefined';
+
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    var condition = args[args.length - 1];
-
-    if (args[args.length - 1] === '~true' && args.pop()) {
-      oldConsole[action].apply(_this, args);
-    } else if (args[args.length - 1] === '~false') {
-      return;
-    } else {
-      var passesGlobal = typeof globalCondition === 'undefined';
-
-      if (!passesGlobal) {
-        passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
-      }
-
-      if (!passesGlobal) {
-        return;
-      } else {
-        if (typeof condition === 'string' || args.length === 1) {
-          oldConsole[action].apply(_this, args);
-        } else if (typeof condition === 'function' && args.pop()) {
-          iterateText(args, condition) && oldConsole[action].apply(_this, args);
-        } else {
-          args.pop() && Boolean(condition) && oldConsole[action].apply(_this, args);
-        }
-      }
+    if (!passesGlobal) {
+      passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
     }
+
+    if (!passesGlobal) {
+      return;
+    }
+
+    oldConsole[action].apply(_this, args);
   };
 };
 
