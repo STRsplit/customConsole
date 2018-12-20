@@ -1,7 +1,7 @@
 {
-  "name": "customconsole",
+  "name": "silentconsole",
   "version": "1.0.0",
-  "description": "custom console methods overwriting native methods",
+  "description": "silence the console output or filter what makes method execute",
   "main": "./src/index.js",
   "files": [
     "src"
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/STRsplit/customConsole.git"
+    "url": "git+https://github.com/STRsplit/silentConsole.git"
   },
   "keywords": [
     "custom",
@@ -35,12 +35,15 @@
     "console.log",
     "overwrite",
     "console custom",
-    "silent console"
+    "silent console",
+    "stop console log",
+    "silent console.log",
+    "no console.log"
   ],
   "author": "Steven Reed",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/STRsplit/customConsole/issues"
+    "url": "https://github.com/STRsplit/silentConsole/issues"
   },
-  "homepage": "https://github.com/STRsplit/customConsole#readme"
+  "homepage": "https://github.com/STRsplit/silentConsole#readme"
 }

@@ -21,27 +21,41 @@ var iterateText = function iterateText(logValues, globalCondition) {
   return globalCondition(logValues);
 };
 
+var hasMethod = new Map();
+
 var _default = function _default(action, globalCondition) {
   action = action || 'log';
+  var globalFunction = typeof globalCondition === 'function';
+
+  if (hasMethod.has(action) && globalCondition !== false) {
+    if (globalFunction) {
+      hasMethod.set(action, 'true');
+    } else {
+      hasMethod.delete(action);
+    }
+  } else {
+    hasMethod.set(action, 'true');
+  }
 
   console[action] = function () {
-    var caller = new Error().stack.split("at ")[2].trim().split(' ')[0];
-    var passesGlobal = false;
-
-    if (caller.split('.')[1] && oldConsole[caller.split('.')[1]]) {
-      passesGlobal = true;
-    }
-
-    if (!passesGlobal && caller !== 'console') {
-      passesGlobal = typeof globalCondition === 'undefined';
-    }
+    var passesGlobal = !hasMethod.has(action);
 
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
     if (!passesGlobal) {
-      passesGlobal = typeof globalCondition === 'function' ? iterateText(args, globalCondition) : Boolean(globalCondition);
+      var caller = new Error().stack.split("at ")[2].trim().split(' ')[0];
+      var selfCalled = caller.split('.')[1] && oldConsole[caller.split('.')[1]];
+      passesGlobal = Boolean(selfCalled);
+
+      if (!passesGlobal && !globalFunction && caller !== 'console') {
+        passesGlobal = typeof globalCondition === 'undefined';
+      }
+
+      if (!passesGlobal) {
+        passesGlobal = globalFunction ? iterateText(args, globalCondition) : Boolean(globalCondition);
+      }
     }
 
     passesGlobal && oldConsole[action].apply(_this, args);
