@@ -7,7 +7,7 @@ Just debugging a legacy project and I had too many logs / warnings printing to t
 ## Usage
 ### Install
 ```
-npm install --save-dev silentConsole
+npm install --save-dev silentconsole
 ```
 
 ### How to Implement
@@ -15,7 +15,7 @@ You can use it at the file level, but it is best for importing at top level (usu
 
 #### Globally silence console.log and console.warn
 ```javascript
-import silentConsole from 'silentConsole';
+import silentConsole from 'silentconsole';
 silentConsole('log');
 silentConsole('warn');
 
@@ -27,7 +27,7 @@ console.info('foo'); // will print 'foo' to console
 #### Globally filter console.log and console.warn with filter method as second argument to silentConsole
 
 ```javascript
-import silentConsole from 'silentConsole';
+import silentConsole from 'silentconsole';
 silentConsole('log', (text) => !text.includes('bar'));
 silentConsole('warn', (text) => !text.includes('baz'));
 
@@ -43,7 +43,7 @@ console.warn('foo bar baz'); // will not print to console
 `original` will be added to the console object storing all of the original methods of console.
 
 ```javascript
-import silentConsole from 'silentConsole';
+import silentConsole from 'silentconsole';
 silentConsole('log');
 
 console.log('foo'); // will not print to console
@@ -58,7 +58,7 @@ This is not a great good use.
 ##### Either call method again with no 2nd parameter
 
 ```javascript
-import silentConsole from 'silentConsole';  
+import silentConsole from 'silentconsole';  
 silentConsole('log');
 console.log('foo'); // will not print to console
 console.log('bar'); // will not print to console
@@ -72,7 +72,7 @@ console.log('bar'); // will print 'bar' to console
 ##### Or call method again with 2nd parameter false as in, do not override log.
 
 ```javascript
-import silentConsole from 'silentConsole';  
+import silentConsole from 'silentconsole';  
 silentConsole('log');
 console.log('foo'); // will not print to console
 console.log('bar'); // will not print to console
@@ -88,7 +88,7 @@ console.log('bar'); // will print 'bar' to console
 Even if you setup the silentConsole, you can still pass in multiple arguments. The printed results will be a bit different depending on what you pass as last argument.
 
 ```javascript
-import silentConsole from 'silentConsole';
+import silentConsole from 'silentconsole';
 silentConsole('log', (text) => !text.includes('test'));
 
 console.log('foo', 'bar', 'baz'); // will print 'foo bar baz' to console
