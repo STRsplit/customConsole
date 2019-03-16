@@ -1,6 +1,6 @@
 {
   "name": "silentconsole",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "silence the console output or filter what makes method execute",
   "main": "./src/index.js",
   "files": [
